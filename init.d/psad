@@ -1,0 +1,51 @@
+#!/sbin/openrc-run
+## Copyright 2006 Michael Rash
+# Distributed under the terms of the GNU General Public License v2
+# Author: Michael Rash
+#    Developed for the Gentoo Linux distribution
+
+depend() {
+	need logger
+}
+
+checkconfig() {
+	if [ ! -f /etc/psad/psad.conf ] ; then
+	eerror "Please create /etc/psad/psad.conf"
+	eerror "You can find a sample config file at /etc/psad/psad.conf.sample"
+	return 1
+	fi
+	return 0
+}
+
+start() {
+	checkconfig || return 1
+	checkpath -q -d -m 755 -o root:root /run/psad
+	checkpath -q -d -m 755 -o root:root /var/lib/psad
+	checkpath -q -d -m 755 -o root:root /var/log/psad
+	[ -p /var/lib/psad/psadfifo ] || mknod -m 600 /var/lib/psad/psadfifo p
+
+	ebegin "Starting ${SVCNAME}"
+	start-stop-daemon \
+		--start \
+		--quiet \
+		--name psad \
+		--exec /usr/sbin/psad \
+		--pidfile /var/run/psad/psad.pid
+	eend $? "Failed to start ${SVCNAME}"
+}
+
+stop() {
+	ebegin "Stopping psadwatchd"
+	start-stop-daemon --stop --quiet --pidfile /var/run/psad/psadwatchd.pid
+	eend $? "Failed to stop psadwatchd"
+
+	if [ -f /var/run/psad/kmsgsd.pid ] ; then
+		ebegin "Stopping kmsgsd"
+		start-stop-daemon --stop --quiet --pidfile /var/run/psad/kmsgsd.pid
+		eend $? "Failed to stop kmsgsd"
+	fi
+
+	ebegin "Stopping ${SVCNAME}"
+	start-stop-daemon --stop --quiet --pidfile /var/run/psad/psad.pid
+	eend $? "Failed to stop ${SVCNAME}"
+}

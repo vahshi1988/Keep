@@ -1,0 +1,8 @@
+# required by sanewall (argument)
+=net-firewall/sanewall-1.1.6-r2 ~amd64
+# required by phpldapadmin (argument)
+=net-nds/phpldapadmin-1.2.3-r1 ~amd64
+# required by shadowsocks-libev (argument)
+=net-proxy/shadowsocks-libev-3.0.6 ~amd64
+# required by grive (argument)
+=net-misc/grive-0.5.1_pre20171005 ~amd64

@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# Uncomment the following if you want
+# logsentry (logcheck) to run hourly
+#
+# this is part of the logsentry package
+#
+#
+
+#/bin/sh /etc/logcheck/logcheck.sh

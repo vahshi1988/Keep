@@ -1,0 +1,8 @@
+{
+	"server":"178.79.168.73",
+	"server_port":1981,
+	"local_port":2323,
+	"password":"f.a.t.003",
+	"timeout":600,
+	"method":"aes-256-cfb"
+}
